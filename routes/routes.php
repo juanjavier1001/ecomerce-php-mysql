@@ -22,6 +22,7 @@ if (empty($arrayUrl)) {
     ];
 
     echo json_encode($json, http_response_code($json["status"]));
+
     return;
 }
 
@@ -35,17 +36,9 @@ if (count($arrayUrl) == 1 && isset($_SERVER["REQUEST_METHOD"])) {
 
     if ($_SERVER["REQUEST_METHOD"] === "GET") {
 
-
-        $json = [
-
-            "status" => 200,
-            "result" => "GET"
-
-        ];
-
-        echo json_encode($json, http_response_code($json["status"]));
-        return;
+        include "services/get.php";
     }
+
 
     /* METHOD POST */
 
@@ -95,4 +88,14 @@ if (count($arrayUrl) == 1 && isset($_SERVER["REQUEST_METHOD"])) {
         echo json_encode($json, http_response_code($json["status"]));
         return;
     }
+} else {
+
+    $json = [
+
+        "status" => 404,
+        "result" => "Not Found"
+
+    ];
+
+    echo json_encode($json, http_response_code($json["status"]));
 }

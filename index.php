@@ -1,14 +1,10 @@
 <?php
-require_once "models/connection.php";
 require_once "controllers/routes.controller.php";
+
 
 $index = new RoutesControllers();
 
 $index->index();
-
-
-$cn = Connection::connectDb();
-var_dump($cn);
 
 
 
