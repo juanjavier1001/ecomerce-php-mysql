@@ -1,14 +1,14 @@
 <?php
 
-//url obtenida //todo lo que viene despues del dominio 
+//url obtenida //todo lo que viene despues del dominio (/course)
 $urlServer = $_SERVER["REQUEST_URI"];
 
 
-//convierto en un array separando por / 
+//convierto en un array separando por / ([0]/[1]course )
 $arrayUrl = explode("/", $urlServer);
 
 
-//elimino los elementos vacios 
+//elimino los elementos vacios ([1] course)
 $arrayUrl = array_filter($arrayUrl);
 
 

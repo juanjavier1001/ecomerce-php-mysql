@@ -14,10 +14,10 @@ class GetController
     /* controller sin filtro  */
     /*  */
 
-    static public function getData($table, $select)
+    static public function getData($table, $select, $orderBy, $orderMode, $lmStart, $lmEnd)
     {
 
-        $response = GetModel::getData($table, $select);
+        $response = GetModel::getData($table, $select, $orderBy, $orderMode, $lmStart, $lmEnd);
 
         return GetController::fnResponse($response);
     }
@@ -27,10 +27,9 @@ class GetController
     /*  */
     /* controller con filtro */
     /*  */
-    static public function getDataFilter($table, $select, $linkTo, $equalTo)
+    static public function getDataFilter($table, $select, $linkTo, $equalTo, $orderBy, $orderMode, $lmStart, $lmEnd)
     {
-
-        $response = GetModel::getDataFilter($table, $select, $linkTo, $equalTo);
+        $response = GetModel::getDataFilter($table, $select, $linkTo, $equalTo, $orderBy, $orderMode, $lmStart, $lmEnd);
         GetController::fnResponse($response);
     }
 

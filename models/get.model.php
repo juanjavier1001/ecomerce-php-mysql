@@ -14,11 +14,31 @@ class GetModel
     /*  */
     /* Model sin filtro */
     /*  */
-    static public function getData($table, $select)
+    static public function getData($table, $select, $orderBy, $orderMode, $lmStart, $lmEnd)
     {
 
         try {
-            $sql = "SELECT $select FROM  $table ";
+            //sin ninguno de los parametros 
+            $sql = "SELECT $select FROM  $table";
+
+            //si existe order by y ademas limit  
+            if ($orderBy != null && $lmStart != null && $lmEnd != null) {
+
+                $sql = "SELECT $select FROM $table ORDER BY $orderBy $orderMode limit $lmStart , $lmEnd";
+            }
+
+            //si existe order by SOLO
+            else if ($orderBy != null) {
+
+                $sql = "SELECT $select FROM  $table order by $orderBy $orderMode";
+            }
+
+            //si existe limit SOLO 
+            else if ($lmStart != null && $lmEnd != null) {
+                $sql = "SELECT $select FROM  $table limit $lmStart , $lmEnd";
+            }
+
+
 
             //preparamos la consulta  
 
@@ -38,7 +58,7 @@ class GetModel
     /* Model con filtro */
     /*  */
 
-    static public function getDataFilter($table, $select, $linkTo, $equalTo)
+    static public function getDataFilter($table, $select, $linkTo, $equalTo, $orderBy, $orderMode, $lmStart, $lmEnd)
     {
 
 
@@ -55,7 +75,7 @@ class GetModel
             //defino una varible vacia , y si en el parametro viene mas de 1 la modifico para que sea parte de la consulta (AND)
             $ArrayText = "";
 
-            //Si $linkToArray tiene mas de un elemento , a este texto le agrego el AND y en la consulta este texto deja de esta vacio
+            //Si $linkToArray tiene mas de un elemento , a este texto le agrego el AND y en la consulta este texto deja de estar vacio
             if (count($linkToArray) > 1) {
 
                 //entonces recorro $linkToArray para modificar la consulta 
@@ -75,6 +95,39 @@ class GetModel
             //Si $linkToArray tiene mas de un elemento , a este texto le agrego el AND y en la consulta este texto deja de esta vacio
 
             $sql = "SELECT $select FROM $table WHERE $linkToArray[0] = :$linkToArray[0] $ArrayText";
+
+
+            //si existe order by y ademas limit  
+            if ($orderBy != null && $lmStart != null && $lmEnd != null) {
+
+                $sql = "SELECT $select FROM $table WHERE $linkToArray[0] = :$linkToArray[0] $ArrayText ORDER BY $orderBy $orderMode LIMIT $lmStart , $lmEnd";
+            }
+
+            //si existe order by SOLO
+            else if ($orderBy != null) {
+
+                $sql = "SELECT $select FROM $table WHERE $linkToArray[0] = :$linkToArray[0] $ArrayText ORDER BY $orderBy $orderMode";
+            }
+
+            //si existe limit SOLO 
+            else if ($lmStart != null && $lmEnd != null) {
+
+                $sql = "SELECT $select FROM $table WHERE $linkToArray[0] = :$linkToArray[0] $ArrayText LIMIT $lmStart , $lmEnd";
+            }
+
+
+
+            /* CODIGO JC PREGUNTAMOS SI VIENE LIKE , SI VIENE MODIFICAMOS LA CONSULTA SACANDO EL IGUAL =  */
+
+            /*  if (strpos($equalToArray[0], 'like') !== false) {
+                $sql = "SELECT $select FROM $table WHERE $linkToArray[0] like 'c%' $ArrayText";
+            } */
+
+            //echo $sql;
+
+            //die();
+
+            /* CODIGO JC PREGUNTAMOS SI VIENE LIKE , SI VIENE MODIFICAMOS LA CONSULTA SACANDO EL IGUAL =  */
 
             //preparamos la consulta
             $query = Connection::connectDb()->prepare($sql);
