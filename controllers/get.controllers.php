@@ -30,7 +30,29 @@ class GetController
     static public function getDataFilter($table, $select, $linkTo, $equalTo, $orderBy, $orderMode, $lmStart, $lmEnd)
     {
         $response = GetModel::getDataFilter($table, $select, $linkTo, $equalTo, $orderBy, $orderMode, $lmStart, $lmEnd);
-        GetController::fnResponse($response);
+        return GetController::fnResponse($response);
+    }
+
+    /*  */
+    /* controller Relacion sin filtro */
+    /*  */
+
+    static public function getDataRel($select, $orderBy, $orderMode, $lmStart, $lmEnd, $rel, $type)
+    {
+
+        $response = GetModel::getDataRel($select, $orderBy, $orderMode, $lmStart, $lmEnd, $rel, $type);
+        return GetController::fnResponse($response);
+    }
+
+    /*  */
+    /* controller Relacion con filtro */
+    /*  */
+
+    static public function getDataRelFilter($select, $linkTo, $equalTo, $orderBy, $orderMode, $lmStart, $lmEnd, $rel, $type)
+    {
+
+        $response = GetModel::getDataRelFilter($select, $linkTo, $equalTo, $orderBy, $orderMode, $lmStart, $lmEnd, $rel, $type);
+        return GetController::fnResponse($response);
     }
 
     /*  */

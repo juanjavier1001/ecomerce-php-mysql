@@ -7,7 +7,7 @@ require_once "controllers/get.controllers.php";
 //$table(/course) esto le tengo que pasar al controlador , para saber a que tabla hacer las consultas 
 $table = $arrayUrl[1];
 
-//me tome el primer elemento del array osea lo que este antes del ?
+//si le pasamos un parametro que siga tomando lo que esta dsp del dominio y antes del param : /courses?param1 , toma :course por $table[0]
 $table = explode("?", $table)[0];
 
 
@@ -18,20 +18,39 @@ $orderBy = $_GET["orderBy"] ?? null;
 $orderMode = $_GET["orderMode"] ?? "ASC";
 $lmStart = $_GET["lmStart"] ?? null;
 $lmEnd = $_GET["lmEnd"] ?? null;
-
-
-
-//consulta seria : order by columna orderMode  
+$rel = $_GET["rel"] ?? null;
+$type = $_GET["type"] ?? null;
+$linkTo = $_GET["linkTo"] ?? null;
+$equalTo = $_GET["equalTo"] ?? null;
 
 /* ******************* */
-/* consulta con filtro */
+/* consulta con relacion con filtro  */
 /* ******************* */
 
-if (isset($_GET["linkTo"]) && isset($_GET["equalTo"])) {
+if (isset($linkTo) && isset($equalTo) && isset($rel) && isset($type) && $table === "relations") {
 
-    $linkTo = $_GET["linkTo"];
-    $equalTo = $_GET["equalTo"];
+    GetController::getDataRelFilter($select, $linkTo, $equalTo, $orderBy, $orderMode, $lmStart, $lmEnd, $rel, $type);
+}
 
+/* ******************* */
+/* consulta con relacion sin filtro  */
+/* ******************* */
+
+//consuta :  select * from courses inner join instructors on courses.id_instructor_course = instructors.id_instructor
+//?rel=courses,instructor . busque relacion entre las tablas courses e instructor  
+//&type=course,instructor . busque coincidencias con los nombres de las columnas en singular 
+//transformada  select * from  $arrayRel[0]  inner join $arrayrel[1] on $arrayRel[0].id_$type[0]_course = $arrayRel[1].id_$type[1];    
+else if (isset($rel) && isset($type) && $table === "relations") {
+
+
+    GetController::getDataRel($select, $orderBy, $orderMode, $lmStart, $lmEnd, $rel, $type);
+
+
+
+    /* ******************* */
+    /* consulta con filtro */
+    /* ******************* */
+} else if (isset($linkTo) && isset($equalTo)) {
 
     GetController::getDataFilter($table, $select, $linkTo, $equalTo, $orderBy, $orderMode, $lmStart, $lmEnd);
 } else {
