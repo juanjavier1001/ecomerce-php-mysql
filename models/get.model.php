@@ -334,4 +334,171 @@ class GetModel
             echo 'Error general: ' . $e->getMessage();
         }
     }
+    /*  */
+    /* Model SearchTo sin relaciones */
+    /*  */
+
+    static public function getDataSearch($table, $select, $linkTo, $searchTo, $orderBy, $orderMode, $lmStart, $lmEnd)
+    {
+
+        //select * from courses where description_course like "%do%"; 
+
+        $linkToArray = explode(",", $linkTo);  //[0][1] = description_course,nombre_columna(en que columna buscar)
+        $searchToArray = explode("_", $searchTo); //[0][1] = "%do%" ,contenido_columna (que cosa de esa columna buscar) 
+        $ArrayTextSearch = "";
+
+
+
+        //consuta a la que quiero llegar : select * from courses  where description_course like "a%" AND image_course =  'python.jpg' ; 
+        if (count($linkToArray) > 1) {
+
+            foreach ($linkToArray as $key => $value) {
+
+                if ($key > 0) {
+                    $ArrayTextSearch .= " AND " . $value . " = " . ":$value" . " ";
+                }
+            }
+        }
+
+        try {
+
+            //consulta sin filtros 
+            $sql = "SELECT $select from $table WHERE $linkToArray[0] LIKE '%$searchToArray[0]%' $ArrayTextSearch";
+
+            //si existe order by y ademas limit  
+            if ($orderBy != null && $lmStart != null && $lmEnd != null) {
+
+                $sql = "SELECT $select from $table WHERE $linkToArray[0] LIKE '%$searchToArray[0]%' $ArrayTextSearch ORDER BY $orderBy $orderMode limit $lmStart , $lmEnd";
+            }
+
+            //si existe order by SOLO
+            else if ($orderBy != null) {
+
+                $sql = "SELECT $select from $table WHERE $linkToArray[0] LIKE '%$searchToArray[0]%' $ArrayTextSearch order by $orderBy $orderMode";
+            }
+
+            //si existe limit SOLO 
+            else if ($lmStart != null && $lmEnd != null) {
+                $sql = "SELECT $select from $table WHERE $linkToArray[0] LIKE '%$searchToArray[0]%' $ArrayTextSearch limit $lmStart , $lmEnd";
+            }
+
+
+            //preparamos la consulta 
+
+            $query = Connection::connectDb()->prepare($sql);
+
+            //bindeamos los datos 
+
+            foreach ($linkToArray as $key => $value) {
+
+                if ($key > 0) {
+                    $query->bindParam(":$value", $searchToArray[$key], PDO::PARAM_STR);
+                }
+            }
+
+
+            //ejecutamos la consulta 
+
+            $query->execute();
+
+            //retornamos los datos 
+
+            return $query->fetchAll(PDO::FETCH_CLASS);
+        } catch (PDOException $e) {
+            echo 'Error general: ' . $e->getMessage();
+        }
+    }
+
+    /*  */
+    /* Model SearchTo sin relaciones */
+    /*  */
+
+    static public function getDataSearchRel($select, $linkTo, $searchTo, $orderBy, $orderMode, $lmStart, $lmEnd, $rel, $type)
+    {
+
+        //consulta que quiero obtener :
+        // select * from courses  inner join instructors on courses.id_instructor_course = instructors.id_instructor where description_course like "a%" AND image_course =  'python.jpg' ; 
+        try {
+
+            $linkToArray = explode(",", $linkTo);
+            $searchToArray = explode("_", $searchTo);
+            $ArrayTextSearchRel = " ";
+
+            if (count($linkToArray) > 1) {
+
+                foreach ($linkToArray as $key => $value) {
+
+                    if ($key > 0) {
+                        $ArrayTextSearchRel .= " AND " . $value . " = " . ":$value" . " ";
+                    }
+                }
+            }
+
+
+            $ArrayRel = explode(",", $rel);
+            $ArrayType = explode(",", $type);
+            $ArrayRelText = " ";
+
+            if (count($ArrayRel) > 1) {
+
+
+                foreach ($ArrayRel as $key => $value) {
+
+                    //comience desde el indice 1 , osea el 2 elemento 
+                    if ($key > 0) {
+
+                        $ArrayRelText .= "INNER JOIN " . $ArrayRel[$key] . " on " . "$ArrayRel[0].id_$ArrayType[$key]_$ArrayType[0] = " . " $ArrayRel[$key].id_$ArrayType[$key]" . " ";
+                    }
+                }
+
+                //consulta sin ($orderBy, $orderMode, $lmStart, $lmEnd)
+                $sql = "SELECT $select from $ArrayRel[0] $ArrayRelText WHERE $linkToArray[0] LIKE '%$searchTo[0]%' $ArrayTextSearchRel ";
+
+                //si existe order by y ademas limit  
+                if ($orderBy != null && $lmStart != null && $lmEnd != null) {
+
+                    $sql = "SELECT $select from $ArrayRel[0] $ArrayRelText WHERE $linkToArray[0] LIKE '%$searchTo[0]%' $ArrayTextSearchRel ORDER BY $orderBy $orderMode limit $lmStart , $lmEnd";
+                }
+
+                //si existe order by SOLO
+                else if ($orderBy != null) {
+
+                    $sql = "SELECT $select from $ArrayRel[0] $ArrayRelText WHERE $linkToArray[0] LIKE '%$searchTo[0]%' $ArrayTextSearchRel order by $orderBy $orderMode";
+                }
+
+                //si existe limit SOLO 
+                else if ($lmStart != null && $lmEnd != null) {
+                    $sql = "SELECT $select from $ArrayRel[0] $ArrayRelText WHERE $linkToArray[0] LIKE '%$searchTo[0]%' $ArrayTextSearchRel limit $lmStart , $lmEnd";
+                }
+
+
+                //preparamos la consulta 
+
+                $query = Connection::connectDb()->prepare($sql);
+
+                //si hay que bindear lo hacemos despues de preparar la consulta 
+
+                foreach ($linkToArray as $key => $value) {
+
+                    if ($key > 0) {
+
+                        $query->bindParam(":$value", $searchToArray[$key], PDO::PARAM_STR);
+                    }
+                }
+
+                //ejecutamos la consulta 
+
+                $query->execute();
+
+
+                //de que forma obtenemos los datos 
+
+                return $query->fetchAll(PDO::FETCH_CLASS);
+            } else {
+                return null;
+            }
+        } catch (PDOException $e) {
+            echo 'Error general: ' . $e->getMessage();
+        }
+    }
 }

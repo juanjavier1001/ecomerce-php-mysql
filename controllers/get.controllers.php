@@ -56,6 +56,30 @@ class GetController
     }
 
     /*  */
+    /* controller  Busqueda sin relaciones (searchTo)*/
+    /*  */
+
+
+    static public function getDataSearch($table, $select, $linkTo, $searchTo, $orderBy, $orderMode, $lmStart, $lmEnd)
+    {
+
+        $response = GetModel::getDataSearch($table, $select, $linkTo, $searchTo, $orderBy, $orderMode, $lmStart, $lmEnd);
+        return GetController::fnResponse($response);
+    }
+
+    /*  */
+    /* controller  Busqueda con relaciones (searchTo)*/
+    /*  */
+
+
+    static public function getDataSearchRel($select, $linkTo, $searchTo, $orderBy, $orderMode, $lmStart, $lmEnd, $rel, $type)
+    {
+        $response = GetModel::getDataSearchRel($select, $linkTo, $searchTo, $orderBy, $orderMode, $lmStart, $lmEnd, $rel, $type);
+        return GetController::fnResponse($response);
+    }
+
+
+    /*  */
     /* Respuesta del controller en formato JSON
     /*  */
     static public function fnResponse($response)

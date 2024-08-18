@@ -22,12 +22,30 @@ $rel = $_GET["rel"] ?? null;
 $type = $_GET["type"] ?? null;
 $linkTo = $_GET["linkTo"] ?? null;
 $equalTo = $_GET["equalTo"] ?? null;
+$searchTo = $_GET["searchTo"] ?? null;
+
+
 
 /* ******************* */
-/* consulta con relacion con filtro  */
+/* consulta con Search con relaciones */
 /* ******************* */
+if (isset($rel) && isset($type) && isset($linkTo) && isset($searchTo) && $table === "relations") {
 
-if (isset($linkTo) && isset($equalTo) && isset($rel) && isset($type) && $table === "relations") {
+    GetController::getDataSearchRel($select, $linkTo, $searchTo, $orderBy, $orderMode, $lmStart, $lmEnd, $rel, $type);
+
+
+    /* ******************* */
+    /* consulta con Search sin relaciones */
+    /* ******************* */
+} else if (isset($linkTo) && isset($searchTo)) {
+
+    //select * from courses where description_course like "%do%"; 
+
+    GetController::getDataSearch($table, $select, $linkTo, $searchTo, $orderBy, $orderMode, $lmStart, $lmEnd);
+    /* ******************* */
+    /* consulta con relacion con filtro  */
+    /* ******************* */
+} else if (isset($linkTo) && isset($equalTo) && isset($rel) && isset($type) && $table === "relations") {
 
     GetController::getDataRelFilter($select, $linkTo, $equalTo, $orderBy, $orderMode, $lmStart, $lmEnd, $rel, $type);
 }
@@ -42,11 +60,7 @@ if (isset($linkTo) && isset($equalTo) && isset($rel) && isset($type) && $table =
 //transformada  select * from  $arrayRel[0]  inner join $arrayrel[1] on $arrayRel[0].id_$type[0]_course = $arrayRel[1].id_$type[1];    
 else if (isset($rel) && isset($type) && $table === "relations") {
 
-
     GetController::getDataRel($select, $orderBy, $orderMode, $lmStart, $lmEnd, $rel, $type);
-
-
-
     /* ******************* */
     /* consulta con filtro */
     /* ******************* */
