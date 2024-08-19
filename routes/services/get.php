@@ -23,6 +23,10 @@ $type = $_GET["type"] ?? null;
 $linkTo = $_GET["linkTo"] ?? null;
 $equalTo = $_GET["equalTo"] ?? null;
 $searchTo = $_GET["searchTo"] ?? null;
+$bet1 = $_GET["bet1"] ?? null;
+$bet2 = $_GET["bet2"] ?? null;
+$filterTo = $_GET["filterTo"] ?? null;
+$inTo = $_GET["inTo"] ?? null;
 
 
 
@@ -48,17 +52,22 @@ if (isset($rel) && isset($type) && isset($linkTo) && isset($searchTo) && $table 
 } else if (isset($linkTo) && isset($equalTo) && isset($rel) && isset($type) && $table === "relations") {
 
     GetController::getDataRelFilter($select, $linkTo, $equalTo, $orderBy, $orderMode, $lmStart, $lmEnd, $rel, $type);
-}
+    /* ******************* */
+    /* consulta con Rango (BETWEEN) y filtro con relations */
+    /* ******************* */
+} else if (isset($rel) && isset($type) && isset($linkTo) && isset($bet1) && isset($bet2) && $table === "relations") {
 
-/* ******************* */
-/* consulta con relacion sin filtro  */
-/* ******************* */
+    GetController::getDataRangeRel($select, $linkTo, $bet1, $bet2, $rel, $type, $filterTo, $inTo, $orderBy, $orderMode, $lmStart, $lmEnd);
 
-//consuta :  select * from courses inner join instructors on courses.id_instructor_course = instructors.id_instructor
-//?rel=courses,instructor . busque relacion entre las tablas courses e instructor  
-//&type=course,instructor . busque coincidencias con los nombres de las columnas en singular 
-//transformada  select * from  $arrayRel[0]  inner join $arrayrel[1] on $arrayRel[0].id_$type[0]_course = $arrayRel[1].id_$type[1];    
-else if (isset($rel) && isset($type) && $table === "relations") {
+
+    /* ******************* */
+    /* consulta con relacion sin filtro  */
+    /* ******************* */
+} else if (isset($rel) && isset($type) && $table === "relations") {
+    //consuta :  select * from courses inner join instructors on courses.id_instructor_course = instructors.id_instructor
+    //?rel=courses,instructor . busque relacion entre las tablas courses e instructor  
+    //&type=course,instructor . busque coincidencias con los nombres de las columnas en singular 
+    //transformada  select * from  $arrayRel[0]  inner join $arrayrel[1] on $arrayRel[0].id_$type[0]_course = $arrayRel[1].id_$type[1];    
 
     GetController::getDataRel($select, $orderBy, $orderMode, $lmStart, $lmEnd, $rel, $type);
     /* ******************* */
@@ -67,6 +76,12 @@ else if (isset($rel) && isset($type) && $table === "relations") {
 } else if (isset($linkTo) && isset($equalTo)) {
 
     GetController::getDataFilter($table, $select, $linkTo, $equalTo, $orderBy, $orderMode, $lmStart, $lmEnd);
+    /* ******************* */
+    /* consulta con Rango (BETWEEN) y filtro sin relations */
+    /* ******************* */
+} else if (isset($bet1) && isset($bet2) && isset($linkTo)) {
+
+    GetController::getDataRange($table, $select, $linkTo, $orderBy, $orderMode, $lmStart, $lmEnd, $bet1, $bet2, $filterTo, $inTo);
 } else {
     /* ******************* */
     /* consulta sin filtro */

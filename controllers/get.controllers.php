@@ -78,6 +78,26 @@ class GetController
         return GetController::fnResponse($response);
     }
 
+    /*  */
+    /* controller  Busqueda con Rango sin reations (Between) */
+    /*  */
+
+    static public function getDataRange($table, $select, $linkTo, $orderBy, $orderMode, $lmStart, $lmEnd, $bet1, $bet2, $filterTo, $inTo)
+    {
+        $response = GetModel::getDataRange($table, $select, $linkTo, $orderBy, $orderMode, $lmStart, $lmEnd, $bet1, $bet2, $filterTo, $inTo);
+        return GetController::fnResponse($response);
+    }
+
+    /*  */
+    /* controller  Busqueda con Rango con reations (Between) */
+    /*  */
+
+    static public function getDataRangeRel($select, $linkTo, $bet1, $bet2, $rel, $type, $filterTo, $inTo, $orderBy, $orderMode, $lmStart, $lmEnd)
+    {
+        $response = GetModel::getDataRangeRel($select, $linkTo, $bet1, $bet2, $rel, $type, $filterTo, $inTo, $orderBy, $orderMode, $lmStart, $lmEnd);
+        return GetController::fnResponse($response);
+    }
+
 
     /*  */
     /* Respuesta del controller en formato JSON
