@@ -12,6 +12,7 @@ $arrayUrl = explode("/", $urlServer);
 $arrayUrl = array_filter($arrayUrl);
 
 
+
 if (empty($arrayUrl)) {
 
     $json = [
@@ -29,6 +30,12 @@ if (empty($arrayUrl)) {
 
 if (count($arrayUrl) == 1 && isset($_SERVER["REQUEST_METHOD"])) {
 
+    //$table 
+
+    $table = $arrayUrl[1];
+    $table = explode("?", $table)[0];
+
+
 
 
     /* METHOD GET */
@@ -45,16 +52,7 @@ if (count($arrayUrl) == 1 && isset($_SERVER["REQUEST_METHOD"])) {
 
     if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
-
-        $json = [
-
-            "status" => 200,
-            "result" => "POST"
-
-        ];
-
-        echo json_encode($json, http_response_code($json["status"]));
-        return;
+        include "services/post.php";
     }
     /* METHOD PUT */
 

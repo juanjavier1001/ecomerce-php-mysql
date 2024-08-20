@@ -1,7 +1,8 @@
-<!-- el controlador llama a un metodo de este modelo para interactuar con la db  -->
-<!-- devuelvo los datos de la consulta al controlador  -->
-<!-- aca hago las consultas sql -->
 <?php
+/* el controlador llama a un metodo de este modelo para interactuar con la db  
+devuelvo los datos de la consulta al controlador  
+aca hago las consultas sql */
+
 
 require_once "connection.php";
 
@@ -576,7 +577,6 @@ class GetModel
             $ArrayInner = "";
             //convierto en un Array lo que viene por $rel (courses,instructors)
             $ArrayRel = explode(",", $rel);
-
             //convierto en un Array lo que viene por $type (courses,instructors)
             $ArrayType = explode(",", $type);
 

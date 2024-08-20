@@ -1,8 +1,8 @@
-<!-- recibo la solicitud enviada por las routes  -->
-<!-- y las envio al modelo e invoco metodos del modelo -->
-<!-- recibo la consulta enviada por el modelo y la muestro al cliente -->
-<!-- creo otro metodo en esta clase para devolver lo q me trae la consulta en datos JSON -->
 <?php
+/* recibo la solicitud enviada por las routes
+y las envio al modelo e invoco metodos del modelo
+recibo la consulta enviada por el modelo y la muestro al cliente
+creo otro metodo en esta clase para devolver lo q me trae la consulta en datos JSON  */
 
 require_once "models/get.model.php";
 
@@ -18,6 +18,7 @@ class GetController
     {
 
         $response = GetModel::getData($table, $select, $orderBy, $orderMode, $lmStart, $lmEnd);
+
 
         return GetController::fnResponse($response);
     }
