@@ -59,16 +59,7 @@ if (count($arrayUrl) == 1 && isset($_SERVER["REQUEST_METHOD"])) {
 
     if ($_SERVER["REQUEST_METHOD"] === "PUT") {
 
-
-        $json = [
-
-            "status" => 200,
-            "result" => "PUT"
-
-        ];
-
-        echo json_encode($json, http_response_code($json["status"]));
-        return;
+        include "services/put.php";
     }
     /* METHOD DELETE */
 
