@@ -20,7 +20,6 @@ class ModelDelete
             $sql = "DELETE from $table WHERE  $nameId =  :$nameId ";
 
 
-
             //prepare 
 
             $query = $pdo->prepare($sql);

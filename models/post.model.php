@@ -6,7 +6,9 @@ require_once "models/connection.php";
 
 class ModelPost
 {
-
+    /*  */
+    /* POST insert into en cualquier tabla  */
+    /*  */
 
     static public function postData($table, $data)
     {
@@ -48,7 +50,7 @@ class ModelPost
 
             foreach ($data as $key => $value) {
 
-                $query->bindParam(":$key", $value, PDO::PARAM_STR);
+                $query->bindParam(":$key", $data[$key], PDO::PARAM_STR);
             }
 
             //ejecuto 
